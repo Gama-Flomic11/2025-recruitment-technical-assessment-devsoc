@@ -45,8 +45,40 @@ app.post("/parse", (req:Request, res:Response) => {
 // [TASK 1] ====================================================================
 // Takes in a recipeName and returns it in a form that 
 const parse_handwriting = (recipeName: string): string | null => {
-  // TODO: implement me
-  return recipeName
+  if (recipeName.length == 0) {
+    return null;
+  }
+
+  let recipe = "";
+  let temp = recipeName
+  let time = true;
+
+  while (recipeName.localeCompare(recipe) !== 0) {
+    recipeName = recipe;
+    if (time === true) {
+      time = false;
+    } else {
+      temp = recipeName;
+    }
+
+    recipe = temp.replace(/[_-]/, ' ');
+    recipe = recipe.replace(/[^a-zA-Z\s]+/, "");
+    recipe = recipe.toLowerCase();
+
+  }
+
+  const words = recipeName.split(" ");
+  let result = words.filter((word) => word.localeCompare(" "));
+  recipe = "";
+
+  for (let index in result) {
+    result[index] = result[index][0].toUpperCase() + result[index].substring(1);
+  }
+
+  recipe = result.join(" ");
+
+  
+  return recipe;
 }
 
 // [TASK 2] ====================================================================
